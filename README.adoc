@@ -1,0 +1,226 @@
+= Example
+:source-highlighter: pygments
+:icons: font
+:imagesdir: images
+:toc:
+
+== Prerequisites
+
+[source,bash]
+----
+$ sudo gem install asciidoctor
+$ sudo gem install asciidoctor-diagram <1>
+$ sudo gem install pygments.rb <2>
+$ brew install plantuml <1>
+----
+<1> needed for inline PlantUML
+<2> Source Code highlighter
+
+== Create HTML
+
+Due to inline PlantUML:
+
+[source,bash]
+----
+$ asciidoctor -D generated -r asciidoctor-diagram README.adoc
+----
+
+Otherwise it would have just been:
+
+[source,bash]
+----
+$ asciidoctor -D generated README.adoc
+----
+
+How the rendered HTML looks:
+
+http://htmlpreview.github.io/?https://github.com/sdavids/ex-asciidoc/blob/master/generated/README.html
+
+== Inline Code
+
+[source,bash]
+.{blank}.eslintrc
+----
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export HOMEBREW_NO_ANALYTICS=1
+
+umask 077
+----
+
+[WARNING]
+====
+Copy'N'Paste Hell!
+====
+
+[source,swift]
+----
+class Person {
+    var firstname: String
+    var lastname: String
+
+    init(firstname: String, lastname: String) {
+        self.firstname = firstname
+        self.lastname = lastname
+    }
+}
+----
+
+== Included Code
+
+[NOTE]
+====
+Why not use the link:Person.swift[actual sources] with highlighting, line numbers, and callouts?
+====
+
+[[IncludedSwift]]
+[source,swift,linenums,highlight=7-8]
+.Person.swift
+----
+include::Person.swift[]
+----
+<1> `<1>` is the first callout
+<2> `// tag::init[]` starts a tag named "init"
+<3> `// end::init[]` ends the tag
+
+Display just one method with the defined tag:
+
+[source,swift]
+----
+include::Person.swift[tags=init]
+----
+
+== Misc
+
+=== Anchors
+
+Go to <<IncludedSwift>>.
+
+=== Lists
+
+[decimal]
+. First
++
+Another line for First.
+. Second
++
+[source,java]
+----
+System.out.println("YAY!");
+----
+. Third
+
+
+e.g.:: for example
+i.e.:: that is
+
+=== Tables
+
+==== Simple
+
+[%header,cols=2*]
+|===
+
+| First
+| Last
+
+| Homer
+| Simpson
+
+| Marge
+| Simpson
+
+|===
+
+==== Inline CSV
+
+,===
+1,2,3
+4,5,6
+,===
+
+==== Included CSV
+
+[%header,format=csv]
+|===
+include::data.csv[]
+|===
+
+
+==== Table in Table
+
+[cols="1,2a"]
+|===
+| Col 1 | Col 2
+
+| Source Code
+|
+
+[source,java]
+----
+List<String> collectorCollection =
+  productList.stream().map(Product::getName).collect(Collectors.toList());
+----
+
+| List
+|
+
+* One
+* Two
+* Three
+
+| Table in Table
+|
+
+[cols="2,1a"]
+!===
+! Col1 ! Col2
+
+! C11
+! C12
+
+!===
+
+|===
+
+=== Diagram
+
+[plantuml, diagram-classes, png]
+----
+class A
+class B
+class C
+class D
+
+A <|-- B
+A <|-- C
+B <|-- D
+----
+
+[plantuml, diagram-sequence, png]
+----
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: Another authentication Response
+----
+
+
+[plantuml, diagram-activity, png]
+----
+start
+if (condition A) then (yes)
+  :Text 1;
+elseif (condition B) then (yes)
+  :Text 2;
+  stop
+elseif (condition C) then (yes)
+  :Text 3;
+elseif (condition D) then (yes)
+  :Text 4;
+else (nothing)
+  :Text else;
+endif
+stop
+----
